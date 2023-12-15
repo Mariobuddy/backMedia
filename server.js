@@ -15,6 +15,7 @@ const base_url = require("./config/base_url");
 const connection = require("./database/connection");
 const postroute = require("./router/postroute");
 const userroute = require("./router/userroute");
+const otproute = require("./router/otproute");
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -36,6 +37,8 @@ app.use(
 );
 app.use("/post", postroute);
 app.use("/user", userroute);
+app.use("/otp", otproute);
+
 
 app.use((error, req, res, next) => {
   error.statusCode = error.statusCode || 500;

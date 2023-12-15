@@ -1,4 +1,5 @@
 const userModel = require("../database/userSchema");
+const otpModel = require("../database/otpSchema");
 const customError = require("../utils/customError");
 const asyncErrorHandling = require("../utils/asyncErrorFunction");
 const cloudinary = require("cloudinary");
@@ -15,13 +16,23 @@ const sendEmail = require("../utils/email");
 // -------------------------------Registrstion-----------------------------------------------
 
 const register = asyncErrorHandling(async (req, res, next) => {
-  const { name, surname, email, password, cpassword, avatar } = req.body;
-  if (!name || !surname || !email || !password || !cpassword || !avatar) {
+  const { name, surname, email, password, cpassword, avatar, otp } = req.body;
+  if (
+    !name ||
+    !surname ||
+    !email ||
+    !password ||
+    !cpassword ||
+    !avatar ||
+    !otp
+  ) {
     return next(new customError("All Fields are required", 422, "fail"));
   }
   const myCloud = await cloudinary.v2.uploader.upload(avatar);
 
   const preUser = await userModel.findOne({ email: email });
+
+  const otpData = await otpModel.findOne({ email });
 
   if (preUser) {
     return next(new customError("Email already exists", 422, "fail"));
@@ -31,6 +42,11 @@ const register = asyncErrorHandling(async (req, res, next) => {
     return next(new customError("Passwords do not match", 422, "fail"));
   }
 
+  if (otpData) {
+    if (otpData.otp != otp) {
+      return next(new customError("Otp is wrong", 422, "fail"));
+    }
+  }
   const userData = new userModel({
     name,
     surname,
