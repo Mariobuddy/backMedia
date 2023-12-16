@@ -72,9 +72,10 @@ const deletePost = asyncErrorHandling(async (req, res, next) => {
 
 const getPost = asyncErrorHandling(async (req, res, next) => {
   let user = await userModel.findById(req.user._id);
-  let post = await postModel.find({ owner: { $in: user.following } });
-
-  res.status(200).json({ sucess: true, post });
+  let post = await postModel
+    .find({ owner: { $in: user.following } })
+    .populate("owner likes comment.user");
+  res.status(200).json({ sucess: true, post: post.reverse() });
 });
 
 // -----------------------------------Get Post End--------------------------------------------------

@@ -207,7 +207,7 @@ const updateProfile = asyncErrorHandling(async (req, res, next) => {
 const profile = asyncErrorHandling(async (req, res, next) => {
   let user = await userModel.findOne(req.user._id).populate("posts");
   if (!user) {
-    return next(new customError("Invalid email", 422, "fail"));
+  return next(new customError("Invalid email", 422, "fail"));
   }
   res.status(200).json({ sucess: true, user });
 });

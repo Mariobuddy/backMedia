@@ -85,6 +85,6 @@ userSchema.methods.generateResetToken = async function () {
   return Token;
 };
 
-let userModel = new mongoose.model("userDetail", userSchema);
+let userModel = new mongoose.model("user", userSchema);
 
 module.exports = userModel;
