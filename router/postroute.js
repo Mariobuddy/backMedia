@@ -11,7 +11,7 @@ const {
 const auth = require("../middleware/auth");
 
 postroute.post("/createpost", auth, createPost);
-postroute.post("/likeunlike/:id", auth, likeAndUnlikePost);
+postroute.get("/likeunlike/:id", auth, likeAndUnlikePost);
 postroute.delete("/deletepost/:id", auth, deletePost);
 postroute.get("/getpost", auth, getPost);
 postroute.put("/updatecaption/:id", auth, updateCaption);

@@ -38,11 +38,11 @@ const likeAndUnlikePost = asyncErrorHandling(async (req, res, next) => {
     let index = post.likes.indexOf(req.user._id);
     post.likes.splice(index, 1);
     await post.save();
-    res.status(200).json({ sucess: true, message: "Unlike" });
+    return res.status(200).json({ sucess: true, message: "Unlike" });
   } else {
     post.likes.push(req.user._id);
     await post.save();
-    res.status(200).json({ sucess: true, message: "Like" });
+    return res.status(200).json({ sucess: true, message: "Like" });
   }
 });
 
