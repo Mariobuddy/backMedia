@@ -34,15 +34,16 @@ const createPost = asyncErrorHandling(async (req, res, next) => {
 const likeAndUnlikePost = asyncErrorHandling(async (req, res, next) => {
   const post = await postModel.findById(req.params.id);
 
-  if (post.likes.includes(req.user._id)) {
-    let index = post.likes.indexOf(req.user._id);
-    post.likes.splice(index, 1);
+  const userLiked = post.likes.includes(req.user._id);
+  
+  if (userLiked) {
+    post.likes.pull(req.user._id); // Using Mongoose's pull method to remove the user ID
     await post.save();
-    return res.status(200).json({ sucess: true, message: "Unlike" });
+    return res.status(200).json({ success: true, message: "Unlike" });
   } else {
     post.likes.push(req.user._id);
     await post.save();
-    return res.status(200).json({ sucess: true, message: "Like" });
+    return res.status(200).json({ success: true, message: "Like" });
   }
 });
 
